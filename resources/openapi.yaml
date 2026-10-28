@@ -22,7 +22,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../../shared/resources/schemas.yaml#/Products"
+              $ref: "https://raw.githubusercontent.com/kaku0/acme-shop-ecom-lib/main/resources/schemas.yaml#/Products"
       responses:
         "200":
           description: OK
@@ -34,14 +34,14 @@ paths:
                     properties:
                       # By not using the 'Products' schema, it makes products optional
                       products:
-                        $ref: "../../shared/resources/schemas.yaml#/Product"
-                  - $ref: "../../shared/resources/schemas.yaml#/Message"
+                        $ref: "https://raw.githubusercontent.com/kaku0/acme-shop-ecom-lib/main/resources/schemas.yaml#/Product"
+                  - $ref: "https://raw.githubusercontent.com/kaku0/acme-shop-ecom-lib/main/resources/schemas.yaml#/Message"
         default:
           description: Error
           content:
             application/json:
               schema:
-                $ref: "../../shared/resources/schemas.yaml#/Message"
+                $ref: "https://raw.githubusercontent.com/kaku0/acme-shop-ecom-lib/main/resources/schemas.yaml#/Message"
       x-amazon-apigateway-auth:
         type: AWS_IAM
       x-amazon-apigateway-integration:

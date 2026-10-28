@@ -1,0 +1,109 @@
+# Backstage catalog for this repository. Shared entries (groups, systems) are identical in every ACME Shop repo.
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: products
+  title: Products
+  description: 'Product catalogue for the online shop: product data, availability and price checks used at checkout.'
+  tags:
+  - python
+  - aws-lambda
+  - dynamodb
+  annotations:
+    github.com/project-slug: kaku0/acme-shop-products
+    stackrails.io/hosts: products.api.acme-shop.example
+  links:
+  - url: https://github.com/kaku0/acme-shop-products
+    title: Source
+spec:
+  type: service
+  lifecycle: production
+  owner: group:catalog-team
+  system: product-catalog
+  providesApis:
+  - products-api
+  dependsOn:
+  - component:platform
+  - component:ecom-lib
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: products-api
+  description: Product lookup and basket validation (backend).
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:catalog-team
+  system: product-catalog
+  definition:
+    $text: ./resources/openapi.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: product-catalog
+  description: 'What ACME sells: products, prices and availability.'
+spec:
+  owner: group:catalog-team
+  domain: commerce
+  type: product
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: acme-group
+  description: 'ACME Retail Group: online and in-store retail.'
+spec:
+  type: root
+  profile:
+    displayName: ACME Retail Group
+    email: acme-group@acme-shop.example
+  children:
+  - digital-commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: digital-commerce
+  description: Everything behind the ACME online shop.
+spec:
+  type: business-unit
+  profile:
+    displayName: Digital Commerce
+    email: digital-commerce@acme-shop.example
+  parent: acme-group
+  children:
+  - customer-experience
+  - order-fulfilment
+  - finance-technology
+  - platform-engineering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: customer-experience
+  description: Storefront, catalogue and customer accounts.
+spec:
+  type: department
+  profile:
+    displayName: Customer Experience
+    email: customer-experience@acme-shop.example
+  parent: digital-commerce
+  children:
+  - storefront-team
+  - catalog-team
+  - identity-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: catalog-team
+  description: Product catalogue and product data.
+spec:
+  type: team
+  profile:
+    displayName: Catalog Team
+    email: catalog-team@acme-shop.example
+  parent: customer-experience
+  children: []

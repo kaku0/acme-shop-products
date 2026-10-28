@@ -26,12 +26,34 @@ tracer = Tracer() # pylint: disable=invalid-name
 def send_events(events: List[dict]):
     """
     Send events to EventBridge
+
+    Each event type is published with its source and detail-type stated
+    explicitly, one event per call.
     """
 
     logger.info("Sending %d events to EventBridge", len(events))
-    # EventBridge only supports batches of up to 10 events
-    for i in range(0, len(events), 10):
-        eventbridge.put_events(Entries=events[i:i+10])
+    for event in events:
+        if event["DetailType"] == "ProductCreated":
+            eventbridge.put_events(Entries=[{
+                **event,
+                "Source": "ecommerce.products",
+                "DetailType": "ProductCreated",
+                "EventBusName": EVENT_BUS_NAME
+            }])
+        elif event["DetailType"] == "ProductModified":
+            eventbridge.put_events(Entries=[{
+                **event,
+                "Source": "ecommerce.products",
+                "DetailType": "ProductModified",
+                "EventBusName": EVENT_BUS_NAME
+            }])
+        elif event["DetailType"] == "ProductDeleted":
+            eventbridge.put_events(Entries=[{
+                **event,
+                "Source": "ecommerce.products",
+                "DetailType": "ProductDeleted",
+                "EventBusName": EVENT_BUS_NAME
+            }])
 
 
 @logger.inject_lambda_context

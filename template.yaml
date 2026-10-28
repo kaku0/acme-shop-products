@@ -16,9 +16,11 @@ Parameters:
     Description: CloudWatch Logs retention period for Lambda functions
   EventBusArn:
     Type: AWS::SSM::Parameter::Value<String>
+    Default: /ecommerce/dev/platform/event-bus/arn
     Description: EventBridge Event Bus ARN
   EventBusName:
     Type: AWS::SSM::Parameter::Value<String>
+    Default: /ecommerce/dev/platform/event-bus/name
     Description: EventBridge Event Bus Name
 
 
@@ -176,4 +178,4 @@ Resources:
     Properties:
       # The path starts with '../..' as this will be evaluated from the
       # products/build folder, not the products folder.
-      TemplateURL: ../../shared/templates/dlq.yaml
+      TemplateURL: templates/dlq.yaml
